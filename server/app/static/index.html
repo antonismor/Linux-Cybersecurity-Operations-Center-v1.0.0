@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Linux Cybersecurity Operations Center</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <div class="shield">⬢</div>
+      <div>
+        <h1>LINUX CYBERSECURITY OPERATIONS CENTER</h1>
+        <div>XDR & ENDPOINT DEFENSE</div>
+      </div>
+    </div>
+
+    <div class="header-kpis">
+      <span><b id="hEndpoints">0</b> Endpoints</span>
+      <span class="good"><b id="hOnline">0</b> Online</span>
+      <span class="warn"><b id="hAlerts">0</b> Alerts</span>
+      <span class="bad"><b id="hIncidents">0</b> Incidents</span>
+      <span class="bad"><b id="hCritical">0</b> Critical</span>
+    </div>
+
+    <div class="live">■ LIVE <span id="clock"></span></div>
+    <div class="admin">● admin<br><small>Administrator</small></div>
+  </header>
+
+  <aside>
+    <nav>
+      <a class="active">⌂ Dashboard</a>
+      <a>▣ Endpoints</a>
+      <a>⇆ Live Events</a>
+      <a>⚠ Incidents</a>
+      <a>⌕ Threat Hunt</a>
+      <a>⌘ Processes</a>
+      <a>⌬ Network</a>
+      <a>◉ DNS Activity</a>
+      <a>▧ File Integrity</a>
+      <a>♟ Authentication</a>
+      <a>⛨ Vulnerabilities</a>
+      <a>◆ MITRE ATT&CK</a>
+      <a>⛓ Isolation / Response</a>
+      <a>▤ Agent Management</a>
+      <a href="#downloads">⇩ Downloads</a>
+      <a>▥ Policies</a>
+      <a>▧ Reports</a>
+      <a>♟ Users & Roles</a>
+      <a>⚙ Settings</a>
+    </nav>
+
+    <div class="aside-foot">
+      v1.0.0<br><br>
+      Powered and Development by<br>
+      <b>antonios.mortos@outlook.com</b>
+    </div>
+  </aside>
+
+  <main>
+    <section class="cards">
+      <div class="card c-blue"><span>▣</span><div>Endpoints<strong id="cEndpoints">0</strong></div><canvas id="sp1"></canvas></div>
+      <div class="card c-green"><span>⛨</span><div>Online<strong id="cOnline">0</strong></div><div class="ring">LIVE</div></div>
+      <div class="card c-yellow"><span>⚠</span><div>Alerts (24h)<strong id="cAlerts">0</strong></div><canvas id="sp2"></canvas></div>
+      <div class="card c-red"><span>▣</span><div>Incidents<strong id="cIncidents">0</strong></div><canvas id="sp3"></canvas></div>
+      <div class="card c-red"><span>⛨</span><div>Critical<strong id="cCritical">0</strong></div><canvas id="sp4"></canvas></div>
+      <div class="card c-blue"><span>◉</span><div>Events / min<strong id="cEventsMin">0</strong></div><canvas id="sp5"></canvas></div>
+    </section>
+
+    <section class="top-grid">
+      <div class="panel map-panel">
+        <div class="panel-title">LIVE THREAT MAP <span>↗</span></div>
+        <svg id="world" viewBox="0 0 1000 420" preserveAspectRatio="none">
+          <defs>
+            <pattern id="grid" width="35" height="35" patternUnits="userSpaceOnUse">
+              <path d="M35 0L0 0 0 35" fill="none" stroke="#12304a" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect width="1000" height="420" fill="#04111f"/>
+          <rect width="1000" height="420" fill="url(#grid)"/>
+          <path class="land" d="M90,105 L155,70 240,76 285,120 255,160 210,172 180,225 135,214 120,165Z
+          M315,95 L390,60 470,72 505,105 480,135 430,140 410,185 365,200 340,145Z
+          M470,205 L535,190 575,220 560,290 515,345 478,310 465,250Z
+          M545,82 L690,60 805,100 870,145 820,190 735,170 670,185 610,150Z
+          M770,250 L850,240 920,280 900,330 820,340 780,300Z"/>
+          <g id="threatArcs"></g>
+          <g id="threatNodes"></g>
+        </svg>
+        <div class="legend">
+          <i class="dot red"></i> Malicious
+          <i class="dot yellow"></i> Suspicious
+          <i class="dot blue"></i> Normal
+        </div>
+      </div>
+
+      <div class="panel connections">
+        <div class="panel-title">RECENT CONNECTIONS</div>
+        <table>
+          <thead><tr><th>TIME</th><th>ENDPOINT</th><th>DETAILS</th><th>COUNTRY</th><th>TYPE</th></tr></thead>
+          <tbody id="connections"></tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">TOP ALERT CATEGORIES (24h)</div>
+        <div id="alertBars"></div>
+      </div>
+    </section>
+
+    <section class="middle-grid">
+      <div class="panel endpoints-panel">
+        <div class="panel-title">▦ ENDPOINTS <span class="tools">↻ ⛶</span></div>
+        <div class="filters">
+          <button class="primary">All (<span id="filterAll">0</span>)</button>
+          <button>Online</button>
+          <button>Offline</button>
+          <button>At Risk</button>
+          <input placeholder="⌕ Search endpoints...">
+          <select><option>Platform: All</option></select>
+          <select><option>Risk: All</option></select>
+        </div>
+        <table>
+          <thead><tr><th>HOSTNAME</th><th>PLATFORM</th><th>USER</th><th>IP ADDRESS</th><th>AGENT</th><th>RISK</th><th>STATE</th><th>LAST SEEN</th><th>ACTIONS</th></tr></thead>
+          <tbody id="endpointRows"></tbody>
+        </table>
+      </div>
+
+      <div class="stack">
+        <div class="panel incidents">
+          <div class="panel-title">⚠ ACTIVE INCIDENTS <span>View All</span></div>
+          <table>
+            <thead><tr><th>#</th><th>SEV</th><th>ENDPOINT</th><th>DETECTION</th><th>TIME</th></tr></thead>
+            <tbody id="incidentRows"></tbody>
+          </table>
+        </div>
+
+        <div class="panel events">
+          <div class="panel-title">↯ LIVE EVENTS <span>View All</span></div>
+          <table>
+            <thead><tr><th>TIME</th><th>ENDPOINT</th><th>TYPE</th><th>DETAILS</th></tr></thead>
+            <tbody id="eventRows"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="bottom-grid">
+      <div class="panel downloads" id="downloads">
+        <div class="panel-title">⇩ AGENT DOWNLOADS <button>Documentation</button></div>
+        <p>Download and deploy endpoint agents. Enrollment is completed with a one-time token.</p>
+        <div id="downloadCards" class="download-cards"></div>
+      </div>
+
+      <div class="panel health">
+        <div class="panel-title">♨ SYSTEM HEALTH <span class="good">● Controller Health</span></div>
+        <div class="health-grid">
+          <div>API Server <b>LIVE</b><i style="--w:99%"></i></div>
+          <div>Web Interface <b>LIVE</b><i style="--w:99%"></i></div>
+          <div>Database <b>LIVE</b><i style="--w:99%"></i></div>
+          <div>Event Ingestor <b>LIVE</b><i style="--w:98%"></i></div>
+          <div>WebSocket <b>LIVE</b><i style="--w:99%"></i></div>
+          <div>Downloads <b>READY</b><i style="--w:98%"></i></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+<script src="/static/app.js"></script>
+</body>
+</html>
