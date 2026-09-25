@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+*.log
+*.tmp
+*.swp
+.env
+venv/
+.venv/
+agent/cyberagent
+.DS_Store
+.idea/
+.vscode/
