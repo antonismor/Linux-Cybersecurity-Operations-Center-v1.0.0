@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Python syntax
+        run: python3 -m compileall -q server/app
+
+      - name: Bash syntax
+        run: |
+          bash -n scripts/install-debian13.sh
+          bash -n scripts/build-agents.sh
+          bash -n scripts/install-agent-linux.sh
+
+      - name: Go formatting
+        run: test -z "$(gofmt -l agent/main.go)"
+
+      - name: Build Linux agent
+        working-directory: agent
+        run: go build ./...
+
+      - name: Build Windows agent
+        working-directory: agent
+        run: CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o /tmp/cyberagent-windows-amd64.exe .
+
+      - name: Build macOS agents
+        working-directory: agent
+        run: |
+          CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o /tmp/cyberagent-darwin-amd64 .
+          CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -o /tmp/cyberagent-darwin-arm64 .
