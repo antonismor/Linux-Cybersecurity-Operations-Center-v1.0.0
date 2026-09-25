@@ -1,0 +1,22 @@
+[Unit]
+Description=Linux Cybersecurity Operations Center API
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=cybersec
+Group=cybersec
+EnvironmentFile=/etc/cybersecurity-ops/controller.env
+WorkingDirectory=/opt/cybersecurity-ops/server
+ExecStart=/opt/cybersecurity-ops/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8010 --workers 2
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/cybersecurity-ops
+
+[Install]
+WantedBy=multi-user.target
