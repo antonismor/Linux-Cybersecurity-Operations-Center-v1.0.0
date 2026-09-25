@@ -30,8 +30,9 @@ jobs:
           bash -n scripts/build-agents.sh
           bash -n scripts/install-agent-linux.sh
 
-      - name: Go formatting
-        run: test -z "$(gofmt -l agent/main.go)"
+      - name: Go vet
+        working-directory: agent
+        run: go vet ./...
 
       - name: Build Linux agent
         working-directory: agent
