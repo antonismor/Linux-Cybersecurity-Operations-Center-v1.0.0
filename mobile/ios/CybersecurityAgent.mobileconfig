@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>PayloadContent</key>
+  <array/>
+  <key>PayloadDisplayName</key>
+  <string>Cybersecurity Operations Center - iOS Enrollment Template</string>
+  <key>PayloadIdentifier</key>
+  <string>com.antoniosmortos.cybersecurity.ios.profile</string>
+  <key>PayloadOrganization</key>
+  <string>Linux Cybersecurity Operations Center</string>
+  <key>PayloadType</key>
+  <string>Configuration</string>
+  <key>PayloadUUID</key>
+  <string>4F8E0900-2AAB-4F90-98BE-2D24E83BC001</string>
+  <key>PayloadVersion</key>
+  <integer>1</integer>
+  <key>PayloadDescription</key>
+  <string>MDM/NetworkExtension deployment profile template. Adapt to the organization's Apple MDM, identifiers, signing, provisioning, and entitlements before production use.</string>
+</dict>
+</plist>
